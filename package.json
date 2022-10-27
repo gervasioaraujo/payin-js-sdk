@@ -1,0 +1,19 @@
+{
+  "name": "payin-js-sdk",
+  "version": "0.0.1",
+  "description": "A library with client codes to integrate with the Liquido API",
+  "main": "index.js",
+  "scripts": {
+    "test": "test()"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gervasioaraujo/payin-js-sdk.git"
+  },
+  "author": "Gervásio Araújo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gervasioaraujo/payin-js-sdk/issues"
+  },
+  "homepage": "https://github.com/gervasioaraujo/payin-js-sdk#readme"
+}
