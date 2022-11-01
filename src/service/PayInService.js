@@ -3,6 +3,8 @@ import AuthClient from "../api-client/AuthClient.js";
 import PayInRequest from "../model/PayInRequest.js";
 import PaymentMethod from "../util/PaymentMethod.js";
 import PixClient from "../api-client/PixClient.js";
+import PayInClient from "../api-client/PayInClient.js";
+import RefundRequest from "../model/RefundRequest.js";
 
 class PayInService {
 
@@ -29,8 +31,6 @@ class PayInService {
         const accessToken = await this.getAccessToken();
 
         if (accessToken != null) {
-            console.log(accessToken);
-            console.log(payInRequest);
 
             const paymentMethod = payInRequest.getPaymentMethod();
 
@@ -48,8 +48,33 @@ class PayInService {
                     this.payInClient = null;
             }
 
-            const payInResponse = this.payInClient.createPayIn(payInRequest);
+            const payInResponse = await this.payInClient.createPayIn(payInRequest);
             return payInResponse;
+        }
+    }
+
+    async cancelPayIn(idempotencyKey = null) {
+        this.authClient = new AuthClient(this.configData);
+        const accessToken = await this.getAccessToken();
+
+        if (accessToken != null) {
+            this.payInClient = new PayInClient(this.configData, accessToken);
+            const cancelResponse = await this.payInClient.cancelPayIn(idempotencyKey);
+            return cancelResponse;
+        }
+
+    }
+
+    async refundPayIn(
+        refundRequest = new RefundRequest()
+    ) {
+        this.authClient = new AuthClient(this.configData);
+        const accessToken = await this.getAccessToken();
+
+        if (accessToken != null) {
+            this.payInClient = new PayInClient(this.configData, accessToken);
+            const refundResponse = await this.payInClient.refundPayIn(refundRequest);
+            return refundResponse;
         }
     }
 

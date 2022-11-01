@@ -1,4 +1,7 @@
 import Payer from "./Payer.js";
+import PaymentTerm from "./PaymentTerm.js";
+import RiskData from "./RiskData.js";
+import Card from "./Card.js";
 
 class PayInRequest {
 
@@ -36,39 +39,35 @@ class PayInRequest {
             const payerObj = new Payer(requestData.payer);
             this.payer = payerObj;
         }
+
+        if (requestData.hasOwnProperty('paymentTerm')) {
+            const paymentTermObj = new PaymentTerm(requestData.paymentTerm);
+            this.paymentTerm = paymentTermObj;
+        }
+
+        if (requestData.hasOwnProperty('riskData')) {
+            const riskDataObj = new RiskData(requestData.riskData);
+            this.riskData = riskDataObj;
+        }
+
+        if (requestData.hasOwnProperty('card')) {
+            const cardObj = new Card(requestData.card);
+            this.card = cardObj;
+        }
+
+        if (requestData.hasOwnProperty('installments')) {
+            this.installments = requestData.installments;
+        }
     }
 
     getIdempotencyKey() {
         return this.idempotencyKey;
     }
 
-    // getAmount() {
-    //     return this.amount;
-    // }
-
-    // getCurrency() {
-    //     return this.currency;
-    // }
-
-    // getCountry() {
-    //     return this.country;
-    // }
-
     getPaymentMethod() {
         return this.paymentMethod;
     }
 
-    // getPaymentFlow() {
-    //     return this.paymentFlow;
-    // }
-
-    // getCallbackUrl() {
-    //     return this.callbackUrl;
-    // }
-
-    // getPayer() {
-    //     return this.payer;
-    // }
 }
 
 export default PayInRequest;

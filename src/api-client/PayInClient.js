@@ -1,26 +1,22 @@
 import axios from "axios";
 
+import Config from "../util/Config.js";
 import PayInRequest from "../model/PayInRequest.js";
+import RefundRequest from "../model/RefundRequest.js";
 
-// abstract
 class PayInClient {
 
-    constructor(accessToken = "") {
+    static CANCEL_ENDPOINT = "/v1/payments/charges/cancel";
+    static REFUND_ENDPOINT = "/v1/payments/charges/refund";
+
+    constructor(configData = new Config(), accessToken = null) {
+        this.configData = configData;
         this.accessToken = accessToken;
     }
-    // abstract
-    // createPayIn(payInRequest = {})
 
-    // setAccessToken(accessToken = "") {
-    //     this.accessToken = accessToken;
-    // }
+    async createPayIn(url = null, payInRequest = new PayInRequest()) {
 
-    async requestPayIn(url = "", payInRequest = new PayInRequest()) {
-        
         const jsonPayload = JSON.stringify(payInRequest);
-
-        console.log(url);
-        console.log(jsonPayload);
 
         try {
             const response = await axios.post(
@@ -35,11 +31,58 @@ class PayInClient {
                 });
 
             const payInResponse = response.data;
-            console.log(payInResponse);
             return payInResponse;
         } catch (error) {
             console.error(error);
             throw "Error while request pay in to Liquido BR API.";
+        }
+    }
+
+    async cancelPayIn(idempotencyKey = null) {
+
+        const url = this.configData.getPayInBaseUrl() + PayInClient.CANCEL_ENDPOINT + `/${idempotencyKey}`;
+
+        try {
+            const response = await axios.post(
+                url,
+                {},
+                {
+                    headers: {
+                        "x-api-key": this.configData.getClientApiKey(),
+                        "Authorization": `Bearer ${this.accessToken}`
+                    }
+                });
+
+            const cancelResponse = response.data;
+            return cancelResponse;
+        } catch (error) {
+            console.error(error);
+            throw "Error while request cancel pay in to Liquido BR API.";
+        }
+    }
+
+    async refundPayIn(refundRequest = new RefundRequest()) {
+
+        const url = this.configData.getPayInBaseUrl() + PayInClient.REFUND_ENDPOINT;
+        const jsonPayload = JSON.stringify(refundRequest);
+
+        try {
+            const response = await axios.post(
+                url,
+                jsonPayload,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-api-key": this.configData.getClientApiKey(),
+                        "Authorization": `Bearer ${this.accessToken}`
+                    }
+                });
+
+            const refundResponse = response.data;
+            return refundResponse;
+        } catch (error) {
+            console.error(error);
+            throw "Error while request refund pay in to Liquido BR API.";
         }
     }
 

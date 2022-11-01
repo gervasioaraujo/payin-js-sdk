@@ -6,15 +6,13 @@ class PixClient extends PayInClient {
 
     static ENDPOINT = "/v1/payments/charges/pix";
 
-    constructor(configData = new Config(), accessToken = "") {
-        super(accessToken);
-        this.configData = configData;
+    constructor(configData = new Config(), accessToken = null) {
+        super(configData, accessToken);
     }
 
-    // *********
-    createPayIn(pixRequest = new PayInRequest()) {
+    async createPayIn(pixRequest = new PayInRequest()) {
         const url = this.configData.getPayInBaseUrl() + PixClient.ENDPOINT;
-        const pixResponse = super.requestPayIn(url, pixRequest);
+        const pixResponse = await super.createPayIn(url, pixRequest);
         return pixResponse;
     }
 
