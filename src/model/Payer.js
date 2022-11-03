@@ -1,4 +1,5 @@
 import Document from "./Document.js";
+import BillingAddress from "./BillingAddress.js";
 
 class Payer {
 
@@ -19,6 +20,11 @@ class Payer {
         if (payerData.hasOwnProperty('document')) {
             const documentObj = new Document(payerData.document);
             this.document = documentObj;
+        }
+
+        if (payerData.hasOwnProperty('billingAddress')) {
+            const billingAddressObj = new BillingAddress(payerData.billingAddress);
+            this.billingAddress = billingAddressObj;
         }
 
     }

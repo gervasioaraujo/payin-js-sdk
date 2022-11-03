@@ -3,6 +3,8 @@ import AuthClient from "../api-client/AuthClient.js";
 import PayInRequest from "../model/PayInRequest.js";
 import PaymentMethod from "../util/PaymentMethod.js";
 import PixClient from "../api-client/PixClient.js";
+import BoletoClient from "../api-client/BoletoClient.js";
+import CreditCardClient from "../api-client/CreditCardClient.js";
 import PayInClient from "../api-client/PayInClient.js";
 import RefundRequest from "../model/RefundRequest.js";
 
@@ -36,16 +38,17 @@ class PayInService {
 
             switch (paymentMethod) {
                 case PaymentMethod.CREDIT_CARD:
-                    // this.payInClient = new CreditCardClient($configData, $accessToken);
+                    this.payInClient = new CreditCardClient(this.configData, accessToken);
                     break;
                 case PaymentMethod.PIX_STATIC_QR:
                     this.payInClient = new PixClient(this.configData, accessToken);
                     break;
                 case PaymentMethod.BOLETO:
-                    // this.payInClient = new BoletoClient($configData, $accessToken);
+                    this.payInClient = new BoletoClient(this.configData, accessToken);
                     break;
                 default:
                     this.payInClient = null;
+                    break;
             }
 
             const payInResponse = await this.payInClient.createPayIn(payInRequest);
