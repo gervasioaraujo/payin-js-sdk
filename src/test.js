@@ -9,20 +9,19 @@ import PaymentMethod from "./util/PaymentMethod.js";
 import PaymentFlow from "./util/PaymentFlow.js";
 import PayInService from "./service/PayInService.js";
 
-async function testPix() {
+const configData = new Config({
+    clientId: "5d64815a0i63n4vuo4haktlb3a",
+    clientSecret: "1dkbocf1bojiefu2akfmnv5dd9evhmqtc833i62c7q3u8flvbt4o",
+    apiKey: "fztXT5QuK755svjly94H6anwAYD1Ap3249jH2djb",
+    isLiveMode: false
+});
 
-    const isLiveMode = false;
+const payInService = new PayInService(configData);
 
-    const configData = new Config({
-        clientId: "5d64815a0i63n4vuo4haktlb3a",
-        clientSecret: "1dkbocf1bojiefu2akfmnv5dd9evhmqtc833i62c7q3u8flvbt4o",
-        apiKey: "fztXT5QuK755svjly94H6anwAYD1Ap3249jH2djb",
-        isLiveMode
-    });
+const idempotencyKey = uuidv4();
 
-    const idempotencyKey = uuidv4();
-
-    const payInRequest = new PayInRequest({
+function getPixPayInRequestDemo() {
+    return new PayInRequest({
         "idempotencyKey": idempotencyKey,
         "amount": 135,
         "currency": Currency.BRL,
@@ -33,46 +32,21 @@ async function testPix() {
         "payer": {
             "name": "Gervásio Araújo",
             "email": "gervasfj@gmail.com",
-            //"phone": "+5586988920714",
+            "phone": "+5586988920714",
             "document": {
                 "documentId": "02140699319",
                 "type": "CPF"
             }
         }
     });
-
-    const payInService = new PayInService(configData);
-    const payInResponse = await payInService.createPayIn(payInRequest);
-    console.log(payInResponse);
-
-    // setTimeout(async () => {
-    //     const cancelResponse = await payInService.cancelPayIn(idempotencyKey);
-    //     console.log(cancelResponse)
-    // }, 4000)
-
-
 }
 
-// testPix();
-
-async function testBoleto() {
-
-    const isLiveMode = false;
-
-    const configData = new Config({
-        clientId: "5d64815a0i63n4vuo4haktlb3a",
-        clientSecret: "1dkbocf1bojiefu2akfmnv5dd9evhmqtc833i62c7q3u8flvbt4o",
-        apiKey: "fztXT5QuK755svjly94H6anwAYD1Ap3249jH2djb",
-        isLiveMode
-    });
-
-    const idempotencyKey = uuidv4();
-
+function getBoletoPayInRequestDemo() {
     const today = new Date();
     today.setDate(today.getDate() + 5);
     const paymentDeadline = today.getTime() / 1000;
 
-    const payInRequest = new PayInRequest({
+    return new PayInRequest({
         "idempotencyKey": idempotencyKey,
         "amount": 535,
         "currency": Currency.BRL,
@@ -102,33 +76,10 @@ async function testBoleto() {
             "paymentDeadline": paymentDeadline
         }
     });
-
-    const payInService = new PayInService(configData);
-    const payInResponse = await payInService.createPayIn(payInRequest);
-    console.log(payInResponse);
-
-    // setTimeout(async () => {
-    //     const cancelResponse = await payInService.cancelPayIn(idempotencyKey);
-    //     console.log(cancelResponse)
-    // }, 4000)
-
-
 }
 
-// testBoleto();
-
-async function testCreditCard() {
-
-    const configData = new Config({
-        clientId: "5d64815a0i63n4vuo4haktlb3a",
-        clientSecret: "1dkbocf1bojiefu2akfmnv5dd9evhmqtc833i62c7q3u8flvbt4o",
-        apiKey: "fztXT5QuK755svjly94H6anwAYD1Ap3249jH2djb",
-        isLiveMode: false
-    });
-
-    const idempotencyKey = uuidv4();
-
-    const payInRequest = new PayInRequest({
+function getCreditCardPayInRequestDemo() {
+    return new PayInRequest({
         "idempotencyKey": idempotencyKey,
         "amount": 535,
         "currency": Currency.BRL,
@@ -163,33 +114,53 @@ async function testCreditCard() {
         },
         "installments": 3,
     });
+}
 
-    const payInService = new PayInService(configData);
+async function createPayIn(payInRequest = new PayInRequest()) {
     const payInResponse = await payInService.createPayIn(payInRequest);
+    return payInResponse;
+}
+
+async function testCreatePix() {
+    const payInRequest = getPixPayInRequestDemo();
+    const payInResponse = await createPayIn(payInRequest);
+    console.log(payInResponse);
+}
+
+// testCreatePix();
+
+async function testCancelPixPayIn() {
+
+    const payInRequest = getPixPayInRequestDemo();
+    const payInResponse = await createPayIn(payInRequest);
     console.log(payInResponse);
 
-    // setTimeout(async () => {
-    //     const cancelResponse = await payInService.cancelPayIn(idempotencyKey);
-    //     console.log(cancelResponse)
-    // }, 4000)
-
+    setTimeout(async () => {
+        const cancelResponse = await payInService.cancelPayIn(idempotencyKey);
+        console.log(cancelResponse)
+    }, 3000)
 
 }
 
-testCreditCard();
+// testCancelPixPayIn()
 
-async function testRefund() {
+async function testCreateBoleto() {
+    const payInRequest = getBoletoPayInRequestDemo();
+    const payInResponse = await createPayIn(payInRequest);
+    console.log(payInResponse);
+}
 
-    const isLiveMode = false;
+// testCreateBoleto();
 
-    const configData = new Config({
-        clientId: "5d64815a0i63n4vuo4haktlb3a",
-        clientSecret: "1dkbocf1bojiefu2akfmnv5dd9evhmqtc833i62c7q3u8flvbt4o",
-        apiKey: "fztXT5QuK755svjly94H6anwAYD1Ap3249jH2djb",
-        isLiveMode
-    });
+async function testCreateCreditCard() {
+    const payInRequest = getCreditCardPayInRequestDemo();
+    const payInResponse = await createPayIn(payInRequest);
+    console.log(payInResponse);
+}
 
-    const idempotencyKey = uuidv4();
+// testCreateCreditCard();
+
+async function testRefundPayIn() {
 
     const refundRequest = new RefundRequest({
         "idempotencyKey": idempotencyKey,
@@ -207,4 +178,4 @@ async function testRefund() {
 
 }
 
-// testRefund();
+// testRefundPayIn();
