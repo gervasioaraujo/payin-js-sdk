@@ -6,6 +6,7 @@ import Currency from "./src/util/Currency.js";
 import PaymentMethod from "./src/util/PaymentMethod.js";
 import PaymentFlow from "./src/util/PaymentFlow.js";
 import PayInService from "./src/service/PayInService.js";
+import PayInStatus from "./src/util/PayInStatus.js";
 
 export {
     Config,
@@ -15,5 +16,6 @@ export {
     Currency,
     PaymentMethod,
     PaymentFlow,
-    PayInService
-}
+    PayInService,
+    PayInStatus
+};

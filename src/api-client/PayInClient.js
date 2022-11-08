@@ -33,8 +33,8 @@ class PayInClient {
             const payInResponse = response.data;
             return payInResponse;
         } catch (error) {
-            console.error(error);
-            throw "Error while request pay in to Liquido BR API.";
+            console.error("Error while request pay in to Liquido BR API.");
+            return error.response.data
         }
     }
 
@@ -56,8 +56,8 @@ class PayInClient {
             const cancelResponse = response.data;
             return cancelResponse;
         } catch (error) {
-            console.error(error);
-            throw "Error while request cancel pay in to Liquido BR API.";
+            console.error("Error while request cancel pay in to Liquido BR API.");
+            return error.response.data;
         }
     }
 
@@ -81,8 +81,8 @@ class PayInClient {
             const refundResponse = response.data;
             return refundResponse;
         } catch (error) {
-            console.error(error);
-            throw "Error while request refund pay in to Liquido BR API.";
+            console.error("Error while request refund pay in to Liquido BR API.");
+            return error.response.data;
         }
     }
 

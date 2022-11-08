@@ -35,6 +35,10 @@ class PayInRequest {
             this.callbackUrl = requestData.callbackUrl;
         }
 
+        if (requestData.hasOwnProperty('description')) {
+            this.description = requestData.description;
+        }
+
         if (requestData.hasOwnProperty('payer')) {
             const payerObj = new Payer(requestData.payer);
             this.payer = payerObj;

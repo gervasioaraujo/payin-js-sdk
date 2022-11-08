@@ -107,7 +107,8 @@ function getCreditCardPayInRequestDemo() {
         },
         "card": {
             "cardHolderName": "Captured",
-            "cardNumber": "4510100541737493",
+            // "cardNumber": "4510100541737493", // Success
+            "cardNumber": "4444333322221112",
             "expirationMonth": "05",
             "expirationYear": "2026",
             "cvc": "715"
@@ -158,7 +159,7 @@ async function testCreateCreditCard() {
     console.log(payInResponse);
 }
 
-// testCreateCreditCard();
+testCreateCreditCard();
 
 async function testRefundPayIn() {
 
