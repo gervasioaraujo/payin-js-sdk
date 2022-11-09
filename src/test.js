@@ -159,7 +159,16 @@ async function testCreateCreditCard() {
     console.log(payInResponse);
 }
 
-testCreateCreditCard();
+// testCreateCreditCard();
+
+async function testGetPayIn() {
+    const payInService = new PayInService(configData);
+    const idempotencyKey = "d0331082-459f-4c4f-TESTE-GERV4";
+    const getResponse = await payInService.getPayIn(idempotencyKey);
+    console.log(getResponse);
+}
+
+// testGetPayIn();
 
 async function testRefundPayIn() {
 

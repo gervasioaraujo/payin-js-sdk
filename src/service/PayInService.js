@@ -56,6 +56,17 @@ class PayInService {
         }
     }
 
+    async getPayIn(idempotencyKey = null) {
+        this.authClient = new AuthClient(this.configData);
+        const accessToken = await this.getAccessToken();
+
+        if (accessToken != null) {
+            this.payInClient = new PayInClient(this.configData, accessToken);
+            const getResponse = await this.payInClient.getPayIn(idempotencyKey);
+            return getResponse;
+        }
+    }
+
     async cancelPayIn(idempotencyKey = null) {
         this.authClient = new AuthClient(this.configData);
         const accessToken = await this.getAccessToken();
@@ -65,7 +76,6 @@ class PayInService {
             const cancelResponse = await this.payInClient.cancelPayIn(idempotencyKey);
             return cancelResponse;
         }
-
     }
 
     async refundPayIn(

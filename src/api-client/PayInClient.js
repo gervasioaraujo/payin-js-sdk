@@ -6,6 +6,7 @@ import RefundRequest from "../model/RefundRequest.js";
 
 class PayInClient {
 
+    static GET_ENDPOINT = "/v1/payments/charges";
     static CANCEL_ENDPOINT = "/v1/payments/charges/cancel";
     static REFUND_ENDPOINT = "/v1/payments/charges/refund";
 
@@ -35,6 +36,28 @@ class PayInClient {
         } catch (error) {
             console.error("Error while request pay in to Liquido BR API.");
             return error.response.data
+        }
+    }
+
+    async getPayIn(idempotencyKey = null) {
+
+        const url = this.configData.getPayInBaseUrl() + PayInClient.GET_ENDPOINT + `/${idempotencyKey}`;
+
+        try {
+            const response = await axios.get(
+                url,
+                {
+                    headers: {
+                        "x-api-key": this.configData.getClientApiKey(),
+                        "Authorization": `Bearer ${this.accessToken}`
+                    }
+                });
+
+            const getResponse = response.data;
+            return getResponse;
+        } catch (error) {
+            console.error("Error while request get pay in to Liquido BR API.");
+            return error.response.data;
         }
     }
 
