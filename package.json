@@ -1,6 +1,6 @@
 {
   "name": "liquido-payin-js-sdk",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A library with client codes to integrate with the Liquido Payin API",
   "main": "index.js",
   "type": "module",
