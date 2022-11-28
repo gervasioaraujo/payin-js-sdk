@@ -67,6 +67,17 @@ class PayInService {
         }
     }
 
+    async getBoletoPdfUrl(idempotencyKey = null) {
+        this.authClient = new AuthClient(this.configData);
+        const accessToken = await this.getAccessToken();
+
+        if (accessToken != null) {
+            this.payInClient = new PayInClient(this.configData, accessToken);
+            const getResponse = await this.payInClient.getBoletoPdfUrl(idempotencyKey);
+            return getResponse;
+        }
+    }
+
     async cancelPayIn(idempotencyKey = null) {
         this.authClient = new AuthClient(this.configData);
         const accessToken = await this.getAccessToken();

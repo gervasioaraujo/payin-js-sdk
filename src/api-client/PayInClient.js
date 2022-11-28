@@ -9,6 +9,7 @@ class PayInClient {
     static GET_ENDPOINT = "/v1/payments/charges";
     static CANCEL_ENDPOINT = "/v1/payments/charges/cancel";
     static REFUND_ENDPOINT = "/v1/payments/charges/refund";
+    static GET_BOLETO_PDF_URL = "/v1/payments/files/boleto/pdf";
 
     constructor(configData = new Config(), accessToken = null) {
         this.configData = configData;
@@ -105,6 +106,28 @@ class PayInClient {
             return refundResponse;
         } catch (error) {
             console.error("Error while request refund pay in to Liquido BR API.");
+            return error.response.data;
+        }
+    }
+
+    async getBoletoPdfUrl(idempotencyKey = null) {
+
+        const url = this.configData.getPayInBaseUrl() + PayInClient.GET_BOLETO_PDF_URL + `/${idempotencyKey}`;
+
+        try {
+            const response = await axios.get(
+                url,
+                {
+                    headers: {
+                        "x-api-key": this.configData.getClientApiKey(),
+                        "Authorization": `Bearer ${this.accessToken}`
+                    }
+                });
+
+            const getResponse = response.data;
+            return getResponse;
+        } catch (error) {
+            console.error("Error while request get Boleto PDF url to Liquido BR API.");
             return error.response.data;
         }
     }

@@ -189,3 +189,12 @@ async function testRefundPayIn() {
 }
 
 // testRefundPayIn();
+
+async function testGetBoletoPdfUrl() {
+    const payInService = new PayInService(configData);
+    const idempotencyKey = "CBINTER-STAGING-BL-A111-AAAAAB";
+    const getResponse = await payInService.getBoletoPdfUrl(idempotencyKey);
+    console.log(getResponse);
+}
+
+// testGetBoletoPdfUrl();
